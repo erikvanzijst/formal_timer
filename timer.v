@@ -42,10 +42,24 @@ module timer(
         end
 
         // busy
+        if (counter > 0) begin
+            _busy_: assert(busy == 1);
+        end
 
         // load works
+        if (f_past_valid) begin
+            if ($past(load) == 1 && $past(reset) == 0) begin
+                _loadworks_: assert($past(cycles) == counter);
+            end
+        end
 
         // counts down
+        if (f_past_valid) begin
+            if (busy == 1 && $past(busy) == 1 && load == 0 && $past(load) == 0 && reset == 0) begin
+                _countdown_: assert($past(counter) == counter + 1);
+            end
+        end
+
     end
     `endif
     
