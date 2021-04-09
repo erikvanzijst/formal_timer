@@ -34,8 +34,12 @@ module timer(
         f_past_valid <= 1;
 
         // cover the counter getting loaded and starting to count
+        _loaded_: cover(reset == 0 && (busy == 1 || load == 1));
 
         // cover timer finishing
+        if (f_past_valid) begin
+            _finishing_: cover(counter == 0 && $past(counter == 1) && $past(reset == 0) && load == 0);
+        end
 
         // busy
 
